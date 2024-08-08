@@ -1,34 +1,60 @@
-<!DOCTYPE html>
+  <!--<!DOCTYPE html>
 <html>
 <head>
   <title><%= title %></title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    .task-form {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .task-form form {
+      width: 100%;
+      max-width: 600px;
+    }
+    .task-list {
+      margin-top: 20px;
+    }
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body>
   <%- include('./header'); %>
   <%- include('./error_messages'); %>
   <% if(isAuth) { %>
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <form action="/" method="post">
-            <label>タスクの追加</label>
-            <input required type="text" name="add" placeholder="何をする?"/>
-            <input class="btn btn-primary" type="submit" value="追加"/>          
-          </form>
-        </div>
-        <div class="col-md-6">
-          <ul>
-            <% for(let todo of todos){ %>
-              <li><span><%= todo.content %></span></li>
-            <% } %>
-          </ul>
-        </div>
+      <div class="task-form">
+        <form action="/" method="post">
+          <label>タスクの追加</label>
+          <input required type="text" name="add" placeholder="何をする?" class="form-control"/>
+          <input class="btn btn-primary mt-2" type="submit" value="追加"/>          
+        </form>
+      </div>
+      <div class="task-list">
+        <ul class="list-group">
+          <% for(let todo of todos){ %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <input type="checkbox" class="mr-2" onclick="toggleComplete(this)"/>
+                <span><%= todo.content %></span>
+              </div>
+              <form action="/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="<%= todo.id %>"/>
+                <input class="btn btn-danger btn-sm" type="submit" value="削除"/>
+              </form>
+            </li>
+          <% } %>
+        </ul>
       </div>
     </div>
   <% } else { %>
-    <h1>Welcome to the TodoApp</h1>
-    <a class="btn btn-primary" href="/signup" role="button">Sign up now!</a>
+    <center>
+      <h1>Welcome to the TodoApp</h1>
+      <a class="btn btn-primary" href="/signup" role="button">Sign up now!</a>
+    </center>
   <% } %>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
           integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -39,5 +65,296 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
           integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
           crossorigin="anonymous"></script>
-  </body>
-  </html>
+  <script>
+    function toggleComplete(checkbox) {
+      const taskText = checkbox.nextElementSibling;
+      if (checkbox.checked) {
+        taskText.classList.add('completed');
+      } else {
+        taskText.classList.remove('completed');
+      }
+    }
+  </script>
+</body>
+</html>
+-->
+
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    .task-form {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .task-form form {
+      display: flex;
+      width: 100%;
+      max-width: 600px;
+    }
+    .task-form input[type="text"] {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    .task-list {
+      margin-top: 20px;
+    }
+    .completed {
+      text-decoration: line-through;
+    }
+    .delete-selected {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    /* Add hover effect */
+    .list-group-item:hover {
+      background-color: #efefef;
+    }
+  </style>
+</head>
+<body>
+  <%- include('./header'); %>
+  <%- include('./error_messages'); %>
+  <% if(isAuth) { %>
+    <div class="container">
+      <div class="task-form">
+        <form action="/" method="post">
+          <label>タスクの追加</label>
+          <input required type="text" name="add" placeholder="何をする?" class="form-control"/>
+          <input class="btn btn-primary" type="submit" value="追加"/>          
+        </form>
+      </div>
+      <div class="task-list">
+        <ul class="list-group">
+          <% for(let todo of todos){ %>
+            <li class="list-group-item d-flex justify-content-between align-items-center" onclick="toggleComplete(this)">
+              <div class="d-flex align-items-center">
+                <input type="checkbox" class="mr-2" data-id="<%= todo.id %>"/>
+                <span><%= todo.content %></span>
+              </div>
+              <form action="/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="<%= todo.id %>"/>
+                <input class="btn btn-outline-danger btn-sm" type="submit" value="削除"/>
+              </form>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+      <div class="delete-selected">
+        <button class="btn btn-outline-danger" onclick="deleteSelected()">完了したタスクを削除</button>
+      </div>
+    </div>
+  <% } else { %>
+    <center>
+      <h1>Welcome to the TodoApp</h1>
+      <a class="btn btn-primary" href="/signup" role="button">Sign up now!</a>
+    </center>
+  <% } %>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+          integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+          integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+          crossorigin="anonymous"></script>
+  <script>
+    function toggleComplete(listItem) {
+      const checkbox = listItem.querySelector('input[type="checkbox"]');
+      const taskText = checkbox.nextElementSibling;
+      checkbox.checked = !checkbox.checked;
+      if (checkbox.checked) {
+        taskText.classList.add('completed');
+      } else {
+        taskText.classList.remove('completed');
+      }
+    }
+
+    function deleteSelected() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      const ids = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-id'));
+      if (ids.length > 0) {
+        fetch('/delete-selected', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ids })
+        }).then(response => {
+          if (response.ok) {
+            window.location.reload();
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    .task-form {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .task-form form {
+      display: flex;
+      width: 100%;
+      max-width: 600px;
+    }
+    .task-form input[type="text"] {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    .task-list {
+      margin-top: 20px;
+    }
+    .completed {
+      text-decoration: line-through;
+    }
+    .delete-selected {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    /* Add hover effect */
+    .list-group-item:hover {
+      background-color: #efefef;
+    }
+    /* Center the dialog box */
+    .dialog-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: white;
+    }
+    .dialog-content {
+      background-color: white;
+      color: black;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .dialog-content h1 {
+      font-size: 1.5rem;
+    }
+    .dialog-content a {
+      margin-top: 10px;
+    }
+    /* Add center class */
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    /* Adjust the welcome message position */
+    .welcome-message {
+      position: absolute;
+      top: 30%; /* Adjust this value to move the welcome message up or down */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <%- include('./header'); %>
+  <%- include('./error_messages'); %>
+  <% if(isAuth) { %>
+    <div class="container">
+      <div class="task-form">
+        <form action="/" method="post">
+          <label>タスクの追加</label>
+          <input required type="text" name="add" placeholder="何をする?" class="form-control"/>
+          <input class="btn btn-primary" type="submit" value="追加"/>          
+        </form>
+      </div>
+      <div class="task-list">
+        <ul class="list-group">
+          <% for(let todo of todos){ %>
+            <li class="list-group-item d-flex justify-content-between align-items-center" onclick="toggleComplete(this)">
+              <div class="d-flex align-items-center">
+                <input type="checkbox" class="mr-2" data-id="<%= todo.id %>"/>
+                <span><%= todo.content %></span>
+              </div>
+              <form action="/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="<%= todo.id %>"/>
+                <input class="btn btn-outline-danger btn-sm" type="submit" value="削除"/>
+              </form>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+      <div class="delete-selected">
+        <button class="btn btn-outline-danger" onclick="deleteSelected()">完了したタスクを削除</button>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="center">
+      <div class="welcome-message">
+        <h1>ToDoアプリをはじめよう</h1>
+        <a class="btn btn-primary" href="/signup" role="button">アカウント作成</a>
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-content">
+          <h1>アカウントをお持ちの場合</h1>
+          <a class="btn btn-primary" href="/signin" role="button">ログイン</a>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+          integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+          integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+          crossorigin="anonymous"></script>
+  <script>
+    function toggleComplete(listItem) {
+      const checkbox = listItem.querySelector('input[type="checkbox"]');
+      const taskText = checkbox.nextElementSibling;
+      checkbox.checked = !checkbox.checked;
+      if (checkbox.checked) {
+        taskText.classList.add('completed');
+      } else {
+        taskText.classList.remove('completed');
+      }
+    }
+
+    function deleteSelected() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      const ids = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-id'));
+      if (ids.length > 0) {
+        fetch('/delete-selected', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ids })
+        }).then(response => {
+          if (response.ok) {
+            window.location.reload();
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>

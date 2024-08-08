@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 <head>
   <title><%= title %></title>
@@ -18,6 +18,75 @@
     <br>
     <input class="btn btn-primary" type="submit" value="Sign in"/>
     </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    .centered-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+    }
+    .form-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    .form-container label {
+      font-size: 1.2em;
+    }
+    .form-container input[type="text"],
+    .form-container input[type="password"] {
+      font-size: 1.2em;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .form-container input[type="submit"] {
+      font-size: 1.2em;
+      padding: 10px 20px;
+    }
+    .form-title {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<%- include('./header'); %>
+<%- include('./error_messages'); %>
+<div class="container centered-form">
+  <div class="form-container">
+    <div class="form-title">Sign in</div>
+    <form action="/signin" method="post">
+      <label>ユーザ名</label>
+      <input required type="text" name="username" class="form-control"/>
+      <label>パスワード</label>
+      <input required type="password" name="password" class="form-control"/>
+      <input class="btn btn-primary btn-block" type="submit" value="Sign in"/>
+    </form>
+  </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
